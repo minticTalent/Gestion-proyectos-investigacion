@@ -1,13 +1,44 @@
-type prueba {
-    _id: ID
+scalar Date
+
+type Lideres{
+   documento: String!
+   nombre: String!
 }
 
-type Query {
-    "prueba para verificar funcionamiento (eliminar al crear los querys del proyecto)"
-    getPrueba: prueba
+type inscripciones{
+   documento: String!
+   nombre: String
+   estado_inscripcion: String
+   fecha_ingreso: Date
+   fecha_egreso: Date
+}
+type avances{
+   fecha_avances: Date
+   descripcion: String
+   observaciones: String
 }
 
-type Mutation {
-    "prueba para verificar funcionamiento (eliminar al crear los mutation del proyecto)"
-    removePrueba(_id: ID!): prueba
+
+
+type Proyecto{
+    _id: ID!
+    nombre_proyecto: String!
+    objetivos_generales: String!
+    objetivos_especificos: String!
+    presupuesto: Int!
+    fecha_inicio: Date!
+    fecha_fin: Date!
+    lideres: [Lideres]
+    inscripciones: [inscripciones]
+    avances: [avances]
+    estado_proyecto: String!
+    fase_proyecto: String
+
+}
+type Query{
+  "Devuelve todos los Proyecto"
+   getProyectos:[Proyecto] 
+
+   "Devuelve un Proyecto"
+   getProyecto(id: ID!): Proyecto
 }
