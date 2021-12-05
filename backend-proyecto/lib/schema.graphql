@@ -1,0 +1,13 @@
+type prueba {
+    _id: ID
+}
+
+type Query {
+    "prueba para verificar funcionamiento (eliminar al crear los querys del proyecto)"
+    getPrueba: prueba
+}
+
+type Mutation {
+    "prueba para verificar funcionamiento (eliminar al crear los mutation del proyecto)"
+    removePrueba(_id: ID!): prueba
+}
