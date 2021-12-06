@@ -1,44 +1,109 @@
 scalar Date
 
-type Lideres{
-   documento: String!
-   nombre: String!
+type Lideres {
+  documento: String!
+  nombre: String!
 }
 
-type inscripciones{
-   documento: String!
-   nombre: String
-   estado_inscripcion: String
-   fecha_ingreso: Date
-   fecha_egreso: Date
+type inscripciones {
+  documento: String!
+  nombre: String
+  estado_inscripcion: String
+  fecha_ingreso: Date
+  fecha_egreso: Date
 }
-type avances{
-   fecha_avances: Date
-   descripcion: String
-   observaciones: String
+type avances {
+  fecha_avances: Date
+  descripcion: String
+  observaciones: String
 }
-
-
-
-type Proyecto{
-    _id: ID!
-    nombre_proyecto: String!
-    objetivos_generales: String!
-    objetivos_especificos: String!
-    presupuesto: Int!
-    fecha_inicio: Date!
-    fecha_fin: Date!
-    lideres: [Lideres]
-    inscripciones: [inscripciones]
-    avances: [avances]
-    estado_proyecto: String!
-    fase_proyecto: String
-
+type Proyecto {
+  _id: ID!
+  nombre_proyecto: String!
+  objetivos_generales: String!
+  objetivos_especificos: String!
+  presupuesto: Int!
+  fecha_inicio: Date!
+  fecha_fin: Date!
+  lideres: [Lideres]
+  inscripciones: [inscripciones]
+  avances: [avances]
+  estado_proyecto: String!
+  fase_proyecto: String
 }
-type Query{
+type Query {
   "Devuelve todos los Proyecto"
-   getProyectos:[Proyecto] 
+  getProyectos: [Proyecto]
 
-   "Devuelve un Proyecto"
-   getProyecto(id: ID!): Proyecto
+  "Devuelve un Proyecto"
+  getProyecto(id: ID!): Proyecto
+}
+
+input ProyectoLideres {
+  documento: String!
+  nombre: String!
+}
+input ProyectoInscripciones {
+  documento: String!
+  nombre: String!
+  estado_inscripcion: String!
+  fecha_ingreso: Date
+  fecha_egreso: Date
+}
+input ProyectoAvances {
+  fecha_avances: Date!
+  descripcion: String!
+  observaciones: String
+}
+input ProyectoInput {
+  nombre_proyecto: String!
+  objetivos_generales: String!
+  objetivos_especificos: String!
+  presupuesto: Int!
+  fecha_inicio: Date!
+  fecha_fin: Date!
+  lideres: [ProyectoLideres]
+  inscripciones: [ProyectoInscripciones]
+  avances: [ProyectoAvances]
+  estado_proyecto: String!
+  fase_proyecto: String
+}
+
+input ProyectoEditLideres {
+  documento: String
+  nombre: String
+}
+input ProyectoEditInscripciones {
+  documento: String
+  nombre: String
+  estado_inscripcion: String
+  fecha_ingreso: Date
+  fecha_egreso: Date
+}
+input ProyectoEditAvances {
+  fecha_avances: Date
+  descripcion: String
+  observaciones: String
+}
+input ProyectoEditInput {
+  nombre_proyecto: String
+  objetivos_generales: String
+  objetivos_especificos: String
+  presupuesto: Int
+  fecha_inicio: Date
+  fecha_fin: Date
+  lideres: [ProyectoEditLideres]
+  inscripciones: [ProyectoEditInscripciones]
+  avances: [ProyectoEditAvances]
+  estado_proyecto: String
+  fase_proyecto: String
+}
+
+type Mutation {
+  "Crea un Proyecto"
+  createProyecto(input: ProyectoInput!): Proyecto
+  "Edita un proyecto"
+  editProyecto(_id: ID!, input: ProyectoEditInput): Proyecto
+  "Elimina un proyecto"
+  removeProyecto(_id: ID!): [Proyecto]
 }
