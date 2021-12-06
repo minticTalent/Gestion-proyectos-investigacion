@@ -4,7 +4,6 @@ type Lideres {
   documento: String!
   nombre: String!
 }
-
 type inscripciones {
   documento: String!
   nombre: String
@@ -31,6 +30,7 @@ type Proyecto {
   estado_proyecto: String!
   fase_proyecto: String
 }
+
 type Query {
   "Devuelve todos los Proyecto"
   getProyectos: [Proyecto]
@@ -99,6 +99,23 @@ input ProyectoEditInput {
   fase_proyecto: String
 }
 
+input ProyectoAddLider {
+  documento: String!
+  nombre: String!
+}
+input ProyectoAddInscripciones {
+  documento: String!
+  nombre: String!
+  estado_inscripcion: String!
+  fecha_ingreso: Date!
+  fecha_egreso: Date
+}
+input ProyectoAddAvances {
+  fecha_avances: Date!
+  descripcion: String!
+  observaciones: String
+}
+
 type Mutation {
   "Crea un Proyecto"
   createProyecto(input: ProyectoInput!): Proyecto
@@ -106,4 +123,18 @@ type Mutation {
   editProyecto(_id: ID!, input: ProyectoEditInput): Proyecto
   "Elimina un proyecto"
   removeProyecto(_id: ID!): [Proyecto]
+  "Agrega lider a un proyecto"
+  addLider(proyectoId: ID!, input: ProyectoAddLider): Proyecto
+  "Agrega estudiante a un proyecto"
+  addEstuadiante(
+    proyectoId: ID!
+    usuarioId: ID!
+    input: ProyectoAddInscripciones
+  ): Proyecto
+  "Agrega avances a un proyecto"
+  addAvance(
+    proyectoId: ID!
+    documento: String!
+    input: ProyectoAddAvances
+  ): Proyecto
 }
