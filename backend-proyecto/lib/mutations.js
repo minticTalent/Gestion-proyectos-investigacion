@@ -87,6 +87,8 @@ module.exports = {
     let usuario;
     let rol;
     let newProyecto;
+    let estudianteData;
+    let validar = false;
     const defaults = {
       fecha_egreso: "",
     };
@@ -99,8 +101,17 @@ module.exports = {
       usuario = await db
         .collection("usuarios")
         .findOne({ _id: ObjectId(usuarioId) });
-      if (!proyecto || !usuario.rol === "estudiante")
-        throw new Error("El proyecto o estudiante no existe");
+      if (
+        usuario.rol == "estudiante" &&
+        input.documento !== String(usuario.identificacion)
+      ) {
+        validar = true;
+      }
+      console.log(validar);
+      if (!proyecto || validar == false)
+        throw new Error(
+          "El proyecto o estudiante no existe, o ya te encuentras registrado"
+        );
       await db
         .collection("proyectos")
         .updateOne(
