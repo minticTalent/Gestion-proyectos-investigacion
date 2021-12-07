@@ -16,6 +16,7 @@ const{
 const mongoUrl= `mongodb+srv://${DB_USER}:${DB_PASSWD}@${DB_HOST}.jtko1.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`
 let connection 
 
+//mongodb+srv://juanespp:<password>@cluster0.jtko1.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
 async function connectDB(){
     if(connection) return connection 
 

@@ -37,6 +37,12 @@ type Query {
 
   "Devuelve un Proyecto"
   getProyecto(id: ID!): Proyecto
+
+  "Devuelve todos los usuarios"
+  getUsuarios: [Usuario]
+
+  "Devuelve un Usuario"
+  getUsuario(id:ID!):Usuario
 }
 
 input ProyectoLideres {
@@ -137,4 +143,38 @@ type Mutation {
     documento: String!
     input: ProyectoAddAvances
   ): Proyecto
+  "Crea un usuario"
+    createUsuario(input: AddUsuario!): Usuario
+  "Edita un usuario"
+    editUsuario(_id:ID!, input:UsuarioEditInput): Usuario
+  "Elimina un usuario por su ID"
+    deleteUsuario(_id: ID!): Boolean
+}
+
+type Usuario{
+    _id: ID!
+    nombre: String!
+    identificacion:String
+    email: String!
+    estado: String
+    password: String!
+    rol: String
+}
+
+input AddUsuario{
+  nombre:String!
+  identificacion:String
+  email: String!
+  estado: String
+  password: String!
+  rol: String
+}
+
+input UsuarioEditInput{
+  nombre:String
+  identificacion:String
+  email:String
+  estado: String
+  password:String
+  rol:String    
 }
