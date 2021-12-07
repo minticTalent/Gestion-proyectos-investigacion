@@ -160,4 +160,57 @@ module.exports = {
     }
     return newProyecto;
   },
+  // Crear un usuario
+    createUsuario: async (root, { input }) => {
+      const defaults = {
+        identification:'',
+        estado:'',
+        rol:''
+      };
+      const newUsuario = Object.assign(defaults, input)
+      let db
+      let usuario
+      try {
+          db = await connectDb()
+          usuario = await db.collection('usuarios').insertOne(newUsuario)
+          newUsuario._id = usuario.insertedId
+      } catch (error) {
+          errorHandler(error)
+      }
+      return newUsuario;
+  },
+  // Editar un usuario por medio de ID
+  editUsuario: async (root, { _id, input }) => {
+    let db
+    let usuario
+    try {
+        db = await connectDb()
+        await db.collection('usuarios').updateOne(
+            { _id: ObjectId(_id) },
+            { $set: input }
+        )
+        usuario = await db.collection('usuarios').findOne(
+            { _id: ObjectId(_id) }
+        )
+    } catch (error) {
+        errorHandler(error)
+    }
+    return usuario
+  },
+  //Elimina un usuario por ID
+  deleteUsuario: async (root, {_id}) => {
+    let db
+
+    try {
+        db = await connectDb()
+        await db.collection('usuarios').deleteOne({
+            _id: ObjectId(_id)
+        })
+    } catch (error) {
+        console.error(error)
+    }
+    return true
+  }
+
 };
+

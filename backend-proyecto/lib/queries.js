@@ -27,7 +27,28 @@ module.exports = {
        }
        return proyecto
 
-   }
-
+   },
+   getUsuarios: async () =>{
+    let db;
+    let usuarios= [];
+    try{
+        db = await connectDb();
+        usuarios = await db.collection("usuarios").find().toArray();
+    }catch (error){
+        errorHandler(error);
+    }
+    return usuarios;
+    },
+    getUsuario: async (root,{id}) => {
+    let db
+    let usuarios
+    try{
+        db = await connectDb()
+        proyecto = await db.collection("usuarios").findOne({_id: ObjectId(id)})
+    }catch (error){
+        errorHandler(error);
+    }
+    return usuarios;
+    }
 
 }
