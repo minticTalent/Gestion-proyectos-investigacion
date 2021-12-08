@@ -89,6 +89,7 @@ module.exports = {
     let newProyecto;
     let estudianteData;
     let validar = false;
+    let validarDocumento = true;
     const defaults = {
       fecha_egreso: "",
     };
@@ -101,10 +102,12 @@ module.exports = {
       usuario = await db
         .collection("usuarios")
         .findOne({ _id: ObjectId(usuarioId) });
-      if (
-        usuario.rol == "estudiante" &&
-        input.documento !== String(usuario.identificacion)
-      ) {
+      estudianteData = proyecto.inscripciones.map((inscripciones) => {
+        if (input.documento == inscripciones.documento) {
+          validarDocumento = false;
+        }
+      });
+      if (usuario.rol == "estudiante" && validarDocumento) {
         validar = true;
       }
       console.log(validar);
@@ -171,57 +174,193 @@ module.exports = {
     }
     return newProyecto;
   },
-  // Crear un usuario
-    createUsuario: async (root, { input }) => {
-      const defaults = {
-        identification:'',
-        estado:'',
-        rol:''
-      };
-      const newUsuario = Object.assign(defaults, input)
-      let db
-      let usuario
-      try {
-          db = await connectDb()
-          usuario = await db.collection('usuarios').insertOne(newUsuario)
-          newUsuario._id = usuario.insertedId
-      } catch (error) {
-          errorHandler(error)
+  // Actualizar una inscripcion de un estudiante
+  editInscripcion: async (root, { proyectoId, documento, input }) => {
+    let db;
+    let proyecto;
+    let update;
+    try {
+      db = await connectDb();
+      proyecto = await db
+        .collection("proyectos")
+        .findOne({ _id: ObjectId(proyectoId) });
+      if (!proyecto) throw new Error("El proyecto no existe");
+      if (input.nombre) {
+        await db.collection("proyectos").updateOne(
+          {
+            _id: ObjectId(proyectoId),
+            "inscripciones.documento": `${documento}`,
+          },
+          { $set: { "inscripciones.$.nombre": input.nombre } }
+        );
       }
-      return newUsuario;
+      if (input.estado_inscripcion) {
+        await db.collection("proyectos").updateOne(
+          {
+            _id: ObjectId(proyectoId),
+            "inscripciones.documento": `${documento}`,
+          },
+          {
+            $set: {
+              "inscripciones.$.estado_inscripcion": input.estado_inscripcion,
+            },
+          }
+        );
+      }
+      if (input.fecha_ingreso) {
+        await db.collection("proyectos").updateOne(
+          {
+            _id: ObjectId(proyectoId),
+            "inscripciones.documento": `${documento}`,
+          },
+          {
+            $set: {
+              "inscripciones.$.fecha_ingreso": input.fecha_ingreso,
+            },
+          }
+        );
+      }
+      if (input.fecha_egreso) {
+        await db.collection("proyectos").updateOne(
+          {
+            _id: ObjectId(proyectoId),
+            "inscripciones.documento": `${documento}`,
+          },
+          {
+            $set: {
+              "inscripciones.$.fecha_egreso": input.fecha_egreso,
+            },
+          }
+        );
+      }
+      update = await db
+        .collection("proyectos")
+        .findOne({ _id: ObjectId(proyectoId) });
+    } catch (error) {
+      errorHandler(error);
+    }
+    return update;
+  },
+  // Agregar una observacion a un proyecto
+  editAvance: async (root, { proyectoId, documento, input }) => {
+    let db;
+    let proyecto;
+    let update;
+    try {
+      db = await connectDb();
+      proyecto = await db
+        .collection("proyectos")
+        .findOne({ _id: ObjectId(proyectoId) });
+      if (!proyecto) throw new Error("El proyecto no existe");
+      if (input.observaciones) {
+        await db.collection("proyectos").updateOne(
+          {
+            _id: ObjectId(proyectoId),
+            "avances.documento": `${documento}`,
+          },
+          { $set: { "avances.$.observaciones": input.observaciones } }
+        );
+      }
+      if (input.fecha_avances) {
+        await db.collection("proyectos").updateOne(
+          {
+            _id: ObjectId(proyectoId),
+            "avances.documento": `${documento}`,
+          },
+          { $set: { "avances.$.fecha_avances": input.fecha_avances } }
+        );
+      }
+      if (input.descripcion) {
+        await db.collection("proyectos").updateOne(
+          {
+            _id: ObjectId(proyectoId),
+            "avances.documento": `${documento}`,
+          },
+          { $set: { "avances.$.descripcion": input.descripcion } }
+        );
+      }
+      update = await db
+        .collection("proyectos")
+        .findOne({ _id: ObjectId(proyectoId) });
+    } catch (error) {
+      errorHandler(error);
+    }
+    return update;
+  },
+  // editar lider de un proyecto
+  editLider: async (root, { proyectoId, documento, input }) => {
+    let db;
+    let proyecto;
+    let update;
+    try {
+      db = await connectDb();
+      proyecto = await db
+        .collection("proyectos")
+        .findOne({ _id: ObjectId(proyectoId) });
+      if (!proyecto) throw new Error("El proyecto no existe");
+      if (input.nombre) {
+        await db.collection("proyectos").updateOne(
+          {
+            _id: ObjectId(proyectoId),
+            "lideres.documento": `${documento}`,
+          },
+          { $set: { "lideres.$.nombre": input.nombre } }
+        );
+      }
+      update = await db
+        .collection("proyectos")
+        .findOne({ _id: ObjectId(proyectoId) });
+    } catch (error) {
+      errorHandler(error);
+    }
+    return update;
+  },
+  // Crear un usuario
+  createUsuario: async (root, { input }) => {
+    const defaults = {
+      identification: "",
+      estado: "",
+      rol: "",
+    };
+    const newUsuario = Object.assign(defaults, input);
+    let db;
+    let usuario;
+    try {
+      db = await connectDb();
+      usuario = await db.collection("usuarios").insertOne(newUsuario);
+      newUsuario._id = usuario.insertedId;
+    } catch (error) {
+      errorHandler(error);
+    }
+    return newUsuario;
   },
   // Editar un usuario por medio de ID
   editUsuario: async (root, { _id, input }) => {
-    let db
-    let usuario
+    let db;
+    let usuario;
     try {
-        db = await connectDb()
-        await db.collection('usuarios').updateOne(
-            { _id: ObjectId(_id) },
-            { $set: input }
-        )
-        usuario = await db.collection('usuarios').findOne(
-            { _id: ObjectId(_id) }
-        )
+      db = await connectDb();
+      await db
+        .collection("usuarios")
+        .updateOne({ _id: ObjectId(_id) }, { $set: input });
+      usuario = await db.collection("usuarios").findOne({ _id: ObjectId(_id) });
     } catch (error) {
-        errorHandler(error)
+      errorHandler(error);
     }
-    return usuario
+    return usuario;
   },
   //Elimina un usuario por ID
-  deleteUsuario: async (root, {_id}) => {
-    let db
+  deleteUsuario: async (root, { _id }) => {
+    let db;
 
     try {
-        db = await connectDb()
-        await db.collection('usuarios').deleteOne({
-            _id: ObjectId(_id)
-        })
+      db = await connectDb();
+      await db.collection("usuarios").deleteOne({
+        _id: ObjectId(_id),
+      });
     } catch (error) {
-        console.error(error)
+      console.error(error);
     }
-    return true
-  }
-
+    return true;
+  },
 };
-

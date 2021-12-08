@@ -12,8 +12,9 @@ type inscripciones {
   fecha_egreso: Date
 }
 type avances {
-  fecha_avances: Date
-  descripcion: String
+  documento: String!
+  fecha_avances: Date!
+  descripcion: String!
   observaciones: String
 }
 type Proyecto {
@@ -42,7 +43,7 @@ type Query {
   getUsuarios: [Usuario]
 
   "Devuelve un Usuario"
-  getUsuario(id:ID!):Usuario
+  getUsuario(id: ID!): Usuario
 }
 
 input ProyectoLideres {
@@ -57,6 +58,7 @@ input ProyectoInscripciones {
   fecha_egreso: Date
 }
 input ProyectoAvances {
+  documento: String!
   fecha_avances: Date!
   descripcion: String!
   observaciones: String
@@ -87,6 +89,7 @@ input ProyectoEditInscripciones {
   fecha_egreso: Date
 }
 input ProyectoEditAvances {
+  documento: String
   fecha_avances: Date
   descripcion: String
   observaciones: String
@@ -98,9 +101,6 @@ input ProyectoEditInput {
   presupuesto: Int
   fecha_inicio: Date
   fecha_fin: Date
-  lideres: [ProyectoEditLideres]
-  inscripciones: [ProyectoEditInscripciones]
-  avances: [ProyectoEditAvances]
   estado_proyecto: String
   fase_proyecto: String
 }
@@ -117,6 +117,7 @@ input ProyectoAddInscripciones {
   fecha_egreso: Date
 }
 input ProyectoAddAvances {
+  documento: String!
   fecha_avances: Date!
   descripcion: String!
   observaciones: String
@@ -143,38 +144,56 @@ type Mutation {
     documento: String!
     input: ProyectoAddAvances
   ): Proyecto
+  "Actualiza una inscripcion de un proyecto"
+  editInscripcion(
+    proyectoId: ID!
+    documento: String
+    input: ProyectoEditInscripciones
+  ): Proyecto
+  "Edita un avance de un proyecto"
+  editAvance(
+    proyectoId: ID!
+    documento: String!
+    input: ProyectoEditAvances
+  ): Proyecto
+  "Edita lider de un proyecto"
+  editLider(
+    proyectoId: ID!
+    documento: String!
+    input: ProyectoEditLideres
+  ): Proyecto
   "Crea un usuario"
-    createUsuario(input: AddUsuario!): Usuario
+  createUsuario(input: AddUsuario!): Usuario
   "Edita un usuario"
-    editUsuario(_id:ID!, input:UsuarioEditInput): Usuario
+  editUsuario(_id: ID!, input: UsuarioEditInput): Usuario
   "Elimina un usuario por su ID"
-    deleteUsuario(_id: ID!): Boolean
+  deleteUsuario(_id: ID!): Boolean
 }
 
-type Usuario{
-    _id: ID!
-    nombre: String!
-    identificacion:String
-    email: String!
-    estado: String
-    password: String!
-    rol: String
-}
-
-input AddUsuario{
-  nombre:String!
-  identificacion:String
+type Usuario {
+  _id: ID!
+  nombre: String!
+  identificacion: String
   email: String!
   estado: String
   password: String!
   rol: String
 }
 
-input UsuarioEditInput{
-  nombre:String
-  identificacion:String
-  email:String
+input AddUsuario {
+  nombre: String!
+  identificacion: String
+  email: String!
   estado: String
-  password:String
-  rol:String    
+  password: String!
+  rol: String
+}
+
+input UsuarioEditInput {
+  nombre: String
+  identificacion: String
+  email: String
+  estado: String
+  password: String
+  rol: String
 }
