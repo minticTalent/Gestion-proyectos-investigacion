@@ -13,6 +13,7 @@ module.exports = {
       avances: [],
     };
     const newProyecto = Object.assign(defaults, input);
+    
     let db;
     let proyecto;
     try {
