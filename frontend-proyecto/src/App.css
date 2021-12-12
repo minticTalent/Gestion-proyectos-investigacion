@@ -1,0 +1,32 @@
+* {
+  box-sizing: border-box !important;
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif !important;
+}
+body {
+  background-color: #f4f4f4 !important;
+}
+.container-on {
+  height: 90vh;
+  align-items: center;
+  padding-left: 300px;
+  margin-top: 50px;
+  transition: padding-left 1.2s;
+}
+.container-off {
+  height: 90vh;
+  align-items: center;
+  padding-left: 30px;
+  margin-top: 50px;
+  transition: padding-left 1.2s;
+}
+@media (max-width: 900px) {
+  .container-on {
+    height: 90vh;
+    align-items: center;
+    padding-left: 120px;
+    margin-top: 50px;
+    transition: padding-left 1.2s;
+  }
+}
