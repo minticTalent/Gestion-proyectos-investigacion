@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { gql, useQuery } from "@apollo/client";
 import { client } from "../../useRequest";
-
-function Login() {
+function Login(props) {
   const [login, setLogin] = useState({
     user: "",
     password: "",
@@ -44,7 +43,7 @@ function Login() {
         localStorage.setItem(`ID`, `${item._id}`);
         localStorage.setItem("rol", `${item.rol}`);
         localStorage.setItem("nombre", `${item.nombre}`);
-        location.href = "/Home";
+        window.location.href = "/Home";
       }
     });
   }
@@ -78,6 +77,11 @@ function Login() {
                             src="http://www.epayment.com.ng/images/blog-wp-login-1200x400.png"
                             alt=""
                             className="img-fluid"
+                            style={{
+                              width: "50%",
+                              position: "flex",
+                              margin: "auto",
+                            }}
                           ></img>
                         </div>
 

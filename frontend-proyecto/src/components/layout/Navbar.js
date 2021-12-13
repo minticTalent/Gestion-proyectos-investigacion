@@ -16,7 +16,7 @@ function Navbar(props) {
   // Cerrar sesion
   const logout = () => {
     localStorage.clear();
-    location.href = "/";
+    window.location.href = "/";
   };
   return (
     <div className="navbar sticky-top">
