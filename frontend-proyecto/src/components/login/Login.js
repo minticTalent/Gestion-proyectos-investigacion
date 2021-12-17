@@ -45,6 +45,7 @@ function Login(props) {
         localStorage.setItem(`ID`, `${item._id}`);
         localStorage.setItem("rol", `${item.rol}`);
         localStorage.setItem("nombre", `${item.nombre}`);
+        localStorage.setItem("documento", `${item.identificacion}`);
         window.location.href = "/Home";
       }
     });
