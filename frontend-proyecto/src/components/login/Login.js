@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { gql, useQuery } from "@apollo/client";
 import { client } from "../../useRequest";
+import { useAlert } from "react-alert";
 function Login(props) {
   const [login, setLogin] = useState({
     user: "",
     password: "",
   });
+  const alert = useAlert();
   const handleChange = (event) => {
     setLogin({
       ...login,
@@ -46,6 +48,8 @@ function Login(props) {
         window.location.href = "/Home";
       }
     });
+    !localStorage.getItem("ID") &&
+      alert.error("usuario invalido o sin autorización");
   }
   return (
     <div>

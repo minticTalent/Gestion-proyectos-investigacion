@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom"; // im
 import Home from "./components/home/Home.js";
 import ListarUsuarios from "./components/usuarios/ListarUsuarios.js"; // Archivo de prueba para mostrar funcionamiento
 import ListarProyectos from "./components/proyectos/ListarProyectos.js"; // Archivo de prueba para mostrar funcionamiento
+import MisProyectos from "./components/proyectos/MisProyectos.js";
 import Login from "./components/login/Login"; // archivo de donde se creara el login
 function App() {
   const [sidebar, setSidebar] = useState(false); // estado llamada de igual forma para el evento de mostrar y ocultar
@@ -46,6 +47,11 @@ function App() {
               {/*Se envia el estado siendo true o false por las props al archivo ListarProyectos */}
               <ListarProyectos sidebar={sidebar} />
             </Route>
+            {localStorage.getItem("rol") !== "administrador" ? (
+              <Route exact path="/mis-proyectos">
+                <MisProyectos sidebar={sidebar} />
+              </Route>
+            ) : null}
           </Switch>
         </Router>
       </>
