@@ -2,6 +2,10 @@ import React, { useState, useEffect } from "react";
 import ViewHeadlineIcon from "@material-ui/icons/ViewHeadline"; // icono de material ui
 import CloseIcon from "@material-ui/icons/Close"; // icono de material ui
 import LogoutIcon from "@mui/icons-material/Logout";
+import HomeIcon from "@material-ui/icons/Home";
+import AccountBoxIcon from "@material-ui/icons/AccountBox";
+import AssignmentTurnedInIcon from "@material-ui/icons/AssignmentTurnedIn";
+import SchoolIcon from "@mui/icons-material/School";
 import { Link, NavLink } from "react-router-dom"; // enrutado con reactrouter dom
 import { SidebarData } from "./SidebarData"; // Importamos el archivo SidebarData que es donde esta el array para el navbar
 import "./Navbar.css";
@@ -42,20 +46,45 @@ function Navbar(props) {
             </NavLink>
           </li>
           {/*Se recorre el array con los datos traidos para mostrarlos en el navbar */}
-          {SidebarData.map((item, index) => {
-            return (
-              <li key={index} className={item.cName}>
-                <NavLink
-                  to={item.path}
-                  title={item.title}
-                  activeClassName="nav-link-active"
-                >
-                  {item.icon}
-                  <span className="responsive">{item.title}</span>
-                </NavLink>
-              </li>
-            );
-          })}
+          <li className="nav-text">
+            <NavLink to="/Home" title="Home" activeClassName="nav-link-active">
+              <HomeIcon />
+              <span className="responsive">Home</span>
+            </NavLink>
+          </li>
+          {localStorage.getItem("rol") == "administrador" ? (
+            <li className="nav-text">
+              <NavLink
+                to="/listar-usuarios"
+                title="Listar usuarios"
+                activeClassName="nav-link-active"
+              >
+                <AccountBoxIcon />
+                <span className="responsive">Listar usuarios</span>
+              </NavLink>
+            </li>
+          ) : null}
+
+          <li className="nav-text">
+            <NavLink
+              to="/listar-proyectos"
+              title="Listar proyectos"
+              activeClassName="nav-link-active"
+            >
+              <AssignmentTurnedInIcon />
+              <span className="responsive">Listar proyectos</span>
+            </NavLink>
+          </li>
+          <li className="nav-text">
+            <NavLink
+              to="/listar-estudiante"
+              title="Listar estudiantes"
+              activeClassName="nav-link-active"
+            >
+              <SchoolIcon />
+              <span className="responsive">Perfil Usuario</span>
+            </NavLink>
+          </li>
         </ul>
       </nav>
     </div>

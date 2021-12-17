@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { gql, useQuery } from "@apollo/client";
 import { client } from "../../useRequest";
+import RegistrarUsuario from "../registrarUsuario/RegistrarUsuario";
 function Login(props) {
   const [login, setLogin] = useState({
     user: "",
@@ -142,7 +143,7 @@ function Login(props) {
                         >
                           No tienes cuenta ?{" "}
                           <a href="#!" style={{ color: "#393f81" }}>
-                            Registrate aquí
+                            <RegistrarUsuario />
                           </a>
                         </p>
                       </form>

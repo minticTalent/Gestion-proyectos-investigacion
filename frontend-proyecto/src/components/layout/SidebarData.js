@@ -2,6 +2,7 @@ import React from "react";
 import HomeIcon from "@material-ui/icons/Home";
 import AccountBoxIcon from "@material-ui/icons/AccountBox";
 import AssignmentTurnedInIcon from "@material-ui/icons/AssignmentTurnedIn";
+import SchoolIcon from "@mui/icons-material/School";
 export const SidebarData = [
   {
     title: "Home", // titulo que va a tener el menu
@@ -19,6 +20,12 @@ export const SidebarData = [
     title: "Listar proyectos",
     path: "/listar-proyectos",
     icon: <AssignmentTurnedInIcon />,
+    cName: "nav-text",
+  },
+  {
+    title: "Listar estudiante",
+    path: "/listar-estudiante",
+    icon: <SchoolIcon />,
     cName: "nav-text",
   },
 ];
