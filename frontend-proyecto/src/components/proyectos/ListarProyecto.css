@@ -1,0 +1,12 @@
+.lideres {
+  margin-left: 10px;
+  color: grey;
+}
+.invisible {
+  display: none;
+  width: 0px;
+  height: 0px;
+}
+.visible {
+  display: block;
+}

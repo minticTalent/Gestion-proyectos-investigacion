@@ -13,7 +13,7 @@ module.exports = {
       avances: [],
     };
     const newProyecto = Object.assign(defaults, input);
-    
+
     let db;
     let proyecto;
     try {
@@ -112,10 +112,9 @@ module.exports = {
         validar = true;
       }
       console.log(validar);
-      if (!proyecto || validar == false)
-        throw new Error(
-          "El proyecto o estudiante no existe, o ya te encuentras registrado"
-        );
+      if (!proyecto || validar == false) {
+        return null;
+      }
       await db
         .collection("proyectos")
         .updateOne(

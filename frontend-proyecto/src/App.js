@@ -6,6 +6,7 @@ import Home from "./components/home/Home.js";
 import ListarUsuarios from "./components/usuarios/ListarUsuarios.js"; // Archivo de prueba para mostrar funcionamiento
 import ListarProyectos from "./components/proyectos/ListarProyectos.js"; // Archivo de prueba para mostrar funcionamiento
 import ListarEstudiante from "./components/estudiantes/ListarEstudiante.js";
+import MisProyectos from "./components/proyectos/MisProyectos.js";
 import Login from "./components/login/Login"; // archivo de donde se creara el login
 import { LocalState } from "@apollo/client/core/LocalState";
 function App() {
@@ -53,6 +54,11 @@ function App() {
             <Route exact path="/listar-estudiante">
               <ListarEstudiante sidebar={sidebar} />
             </Route>
+            {localStorage.getItem("rol") !== "administrador" ? (
+              <Route exact path="/mis-proyectos">
+                <MisProyectos sidebar={sidebar} />
+              </Route>
+            ) : null}
           </Switch>
         </Router>
       </>

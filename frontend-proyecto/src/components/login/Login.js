@@ -2,11 +2,13 @@ import React, { useState } from "react";
 import { gql, useQuery } from "@apollo/client";
 import { client } from "../../useRequest";
 import RegistrarUsuario from "../registrarUsuario/RegistrarUsuario";
+import { useAlert } from "react-alert";
 function Login(props) {
   const [login, setLogin] = useState({
     user: "",
     password: "",
   });
+  const alert = useAlert();
   const handleChange = (event) => {
     setLogin({
       ...login,
@@ -44,9 +46,12 @@ function Login(props) {
         localStorage.setItem(`ID`, `${item._id}`);
         localStorage.setItem("rol", `${item.rol}`);
         localStorage.setItem("nombre", `${item.nombre}`);
+        localStorage.setItem("documento", `${item.identificacion}`);
         window.location.href = "/Home";
       }
     });
+    !localStorage.getItem("ID") &&
+      alert.error("usuario invalido o sin autorización");
   }
   return (
     <div>
