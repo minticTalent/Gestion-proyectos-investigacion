@@ -42,23 +42,23 @@ export const EDITAR_USUARIO = gql`
     editUsuario(_id: $id, input: $createinput) {
       _id
       estado
+      nombre
+      identificacion
+      email
     }
   }
 `;
-// export const CONSULTAR_ID = gql`
-//   query{
-//     createUser($id:ID!){
-//       getUsuario(id: $id){
-//
-//         nombre
-//         dentificacion
-//         email
-//         estado
-//       }
-
-//     }
-//  }
-// `;
+export const CONSULTAR_ID = gql`
+  query createUser($id: ID!) {
+    getUsuario(id: $id) {
+      _id
+      nombre
+      identificacion
+      email
+      estado
+    }
+  }
+`;
 
 export const LISTAR_PROYECTOS = gql`
   query {
