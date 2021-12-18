@@ -40,7 +40,7 @@ function Listar(props) {
         console.log(data);
       }
     },
-    refetchQueries: [{ query: USUARIOS }],
+     
   });
   const handleChange = (event) => {
     setActualizar({
