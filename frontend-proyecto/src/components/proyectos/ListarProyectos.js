@@ -5,6 +5,7 @@ import {
   client,
   LISTAR_PROYECTOS,
   EDIT_PROYECTO,
+  UPDATE_PROYECTO,
 } from "../../useRequest.js";
 import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
 import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
@@ -22,9 +23,20 @@ function ListarProyectos(props) {
   const [visible, setVisible] = useState(false); // Mostrar y ocultar los lideres
   const [visibleIns, setVisibleIns] = useState(false); // Mostrar y ocultar las inscripciones
   const [visibleAvances, setVisibleAvance] = useState(false); // Mostrar y ocultar los avances
+  const [show, setShow] = useState(false); //Estado para modal inscripcion
+  const [showFaseProyecto, setShowFaseProyecto] = useState(false); //Estado para modal inscripcion
+  const [showEstado, setShowEstado] = useState(false); // Estado para modal actualizar estado
   const [idProyecto, setIdProyecto] = useState({
     // id del proyecto para solo mostrar y ocultar en un solo proyecto
     id: "",
+  });
+  const [stateUpdateEstado, setStateUpdateEstado] = useState({
+    id: "",
+    estado_proyecto: "",
+  });
+  const [stateUpdateFaseProyecto, setStateUpdateFaseProyecto] = useState({
+    id: "",
+    fase_proyecto: "",
   });
   const [mutationInscripcion, setMutationInscripcion] = useState({
     //Estado mutacion inscripcion proyecto
@@ -37,13 +49,12 @@ function ListarProyectos(props) {
     id_estudiante: "",
     nombreProyecto: "",
   });
-  const [show, setShow] = useState(false); //Estado para modal inscripcion
-  const [showEstado, setShowEstado] = useState(false); // Estado para modal actualizar estado
   //FIN DE LOS ESTADOS QUE SE UTILIZAN
 
   //TODAS LAS FUNCIONES PARA LOS MODALES
   const handleClose = () => setShow(false); //Funciones para el modal
   const handleCloseStado = () => setShowEstado(false); // Funcion para cerrar modal update estado
+  const handleCloseFaseProyecto = () => setShowFaseProyecto(false);
   //FIN FUNCIONES MODALES
 
   //QUERYS
@@ -75,7 +86,42 @@ function ListarProyectos(props) {
     refetchQueries: [{ query: LISTAR_PROYECTOS }],
   });
   // FIN MUTACIONES
+  const [mutationUpdateEStado] = useMutation(UPDATE_PROYECTO, {
+    variables: {
+      id: stateUpdateEstado.id,
+      updateInput: {
+        estado_proyecto: stateUpdateEstado.estado_proyecto,
+      },
+    },
+    onCompleted(data) {
+      if (data) {
+        alert.success("estado actualizado");
+        setStateUpdateEstado({
+          id: "",
+          estado_proyecto: "",
+        });
+      }
+    },
+  });
 
+  //mutacion para la fase del proyecto
+  const [mutationUpdateFaseProyecto] = useMutation(UPDATE_PROYECTO, {
+    variables: {
+      id: stateUpdateFaseProyecto.id,
+      updateInput: {
+        fase_proyecto: stateUpdateFaseProyecto.fase_proyecto,
+      },
+    },
+    onCompleted(data) {
+      if (data) {
+        alert.success("fase del proyecto actualizado");
+        setStateUpdateFaseProyecto({
+          id: "",
+          fase_proyecto: "",
+        });
+      }
+    },
+  });
   //FUNCIONES AL UTILIZAR EN EL PROYECTO
   const visibilidad = (id) => {
     setIdProyecto(id);
@@ -113,6 +159,9 @@ function ListarProyectos(props) {
       Actualiza el estado si es activo a inactivo y viceversa{" "}
     </Tooltip>
   );
+  const renderTooltipFaseProyecto = (props) => (
+    <Tooltip {...props}>Actualiza la fase el proyecto </Tooltip>
+  );
   //Metodos para agregar estuadiante a un proyecto
   async function HandleClickInscripcion(id, nombreProyecto) {
     setMutationInscripcion({
@@ -139,21 +188,91 @@ function ListarProyectos(props) {
   }
   // metodo para motrar el modal de actualizar un estado
   const updateProyectoEstado = (id, estado) => {
+    setStateUpdateEstado({
+      ...stateUpdateEstado,
+      id: id,
+    });
     setShowEstado(true);
   };
   // metodo para envio de formulario
   const handleSubmitEstado = (event) => {
     event.preventDefault();
+    mutationUpdateEStado();
+    setShowEstado(false);
   };
   //metodo para el evento que captura el form de actualizar estado
   const handleChangeEstado = (e) => {
-    console.log(e.target.value);
+    setStateUpdateEstado({
+      ...stateUpdateEstado,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  //METODO PARA CAMBIAR LA FASE DEL PROYECTO
+  const updateFaseProyecto = (id, fase_proyecto) => {
+    setStateUpdateFaseProyecto({
+      ...stateUpdateFaseProyecto,
+      id: id,
+    });
+    setShowFaseProyecto(true);
+  };
+  const handleSubmitFaseProyecto = (e) => {
+    e.preventDefault();
+    mutationUpdateFaseProyecto();
+    setShowFaseProyecto(false);
+  };
+  const handleChangeFaseProyecto = (e) => {
+    setStateUpdateFaseProyecto({
+      ...stateUpdateFaseProyecto,
+      [e.target.name]: e.target.value,
+    });
   };
   return (
     //clasName={sidebar ...} principal que tiene que llevar todas las paginas para acomodar su container dependiendo si esta abierto o cerrado el navbar
     <>
       <div className={sidebar ? "container-on" : "container-off"}>
         {localStorage.getItem("rol") == "lider" ? <CrearProyecto /> : null}
+        {/**Modal para actualizar la fase del proyecto */}
+        <Modal show={showFaseProyecto} onHide={handleCloseFaseProyecto}>
+          <Modal.Header closeButton>
+            <Modal.Title>Actualizar Fase proyecto</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <form onSubmit={handleSubmitFaseProyecto}>
+              <div className="row">
+                <div className="col-md-auto mt-2">
+                  <label className="form-label">
+                    Actualizar fase del proyecto:
+                  </label>
+                </div>
+                <div className="col-md-6">
+                  <select
+                    className="form-select"
+                    required
+                    name="fase_proyecto"
+                    aria-label="Seleccionar la opción"
+                    onChange={handleChangeFaseProyecto}
+                  >
+                    <option defaultValue>Seleccione la opción</option>
+                    <option value="iniciado">iniciado</option>
+                    <option value="desarrollo">desarrolo</option>
+                    <option value="terminado">terminado</option>
+                  </select>
+                </div>
+                <div className="col-md-6">
+                  <button type="submit" className="btn btn-dark">
+                    Actualizar
+                  </button>
+                </div>
+              </div>
+            </form>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleCloseFaseProyecto}>
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
         {/* Modal para actualizar el estado de un proyecto */}
         <Modal show={showEstado} onHide={handleCloseStado}>
           <Modal.Header closeButton>
@@ -168,14 +287,20 @@ function ListarProyectos(props) {
                 <div className="col-md-6">
                   <select
                     className="form-select"
-                    name="updateEstado"
+                    required
+                    name="estado_proyecto"
                     aria-label="Default select example"
                     onChange={handleChangeEstado}
                   >
-                    <option defaultValue>Open this select menu</option>
+                    <option defaultValue>Seleccione la opción</option>
                     <option value="activo">activo</option>
                     <option value="inactivo">inactivo</option>
                   </select>
+                </div>
+                <div className="col-md-6">
+                  <button type="submit" className="btn btn-dark">
+                    Actualizar
+                  </button>
                 </div>
               </div>
             </form>
@@ -374,7 +499,8 @@ function ListarProyectos(props) {
                                 />
                               </OverlayTrigger>
                               {localStorage.getItem("rol") == "estudiante" &&
-                              items.estado_proyecto == "activo" ? (
+                              items.estado_proyecto == "activo" &&
+                              items.fase_proyecto !== "terminado" ? (
                                 <OverlayTrigger
                                   placement="top"
                                   delay={{ show: 250, hide: 400 }}
@@ -564,7 +690,28 @@ function ListarProyectos(props) {
                             <p className="card-text">Fase del proyecto:</p>
                           </div>
                           <div className="col-md-7 align-self-start">
-                            <p className="card-text">{items.fase_proyecto}</p>
+                            <p className="card-text">
+                              {items.fase_proyecto}
+                              {localStorage.getItem("rol") ==
+                              "administrador" ? (
+                                <OverlayTrigger
+                                  placement="top"
+                                  delay={{ show: 250, hide: 400 }}
+                                  overlay={renderTooltipFaseProyecto}
+                                >
+                                  <SecurityUpdateWarningRoundedIcon
+                                    style={{ cursor: "pointer" }}
+                                    color="secondary"
+                                    onClick={() =>
+                                      updateFaseProyecto(
+                                        items._id,
+                                        items.fase_proyecto
+                                      )
+                                    }
+                                  />
+                                </OverlayTrigger>
+                              ) : null}
+                            </p>
                           </div>
                         </div>
                       </div>

@@ -8,6 +8,7 @@ import AssignmentTurnedInIcon from "@material-ui/icons/AssignmentTurnedIn";
 import SchoolIcon from "@mui/icons-material/School";
 import { Link, NavLink } from "react-router-dom"; // enrutado con reactrouter dom
 import { SidebarData } from "./SidebarData"; // Importamos el archivo SidebarData que es donde esta el array para el navbar
+import BadgeIcon from "@mui/icons-material/Badge";
 import "./Navbar.css";
 function Navbar(props) {
   const { showSidebarApp } = props; // función traia desde app.js para enviar el estado sideba
@@ -85,6 +86,19 @@ function Navbar(props) {
               <span className="responsive">Perfil Usuario</span>
             </NavLink>
           </li>
+          {localStorage.getItem("rol") == "estudiante" ||
+          localStorage.getItem("rol") == "lider" ? (
+            <li className="nav-text">
+              <NavLink
+                to="/mis-proyectos"
+                title="mis proyectos"
+                activeClassName="nav-link-active"
+              >
+                <BadgeIcon />
+                <span className="responsive">Mis proyectos</span>
+              </NavLink>
+            </li>
+          ) : null}
         </ul>
       </nav>
     </div>

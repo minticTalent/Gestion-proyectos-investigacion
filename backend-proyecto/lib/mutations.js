@@ -31,6 +31,16 @@ module.exports = {
     let proyecto;
     try {
       db = await connectDb();
+      if (input.fase_proyecto == "terminado") {
+        await db.collection("proyectos").updateMany(
+          {
+            _id: ObjectId(_id),
+            "inscripciones.fecha_egreso": "",
+          },
+          { $set: { "inscripciones.$.fecha_egreso": new Date() } },
+          { multi: true }
+        );
+      }
       await db
         .collection("proyectos")
         .updateOne({ _id: ObjectId(_id) }, { $set: input });

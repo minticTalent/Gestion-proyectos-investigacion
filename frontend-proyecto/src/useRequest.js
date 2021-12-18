@@ -139,3 +139,71 @@ export const EDIT_PROYECTO = gql`
     }
   }
 `;
+export const UPDATE_ESTADO_INSCRIPCION = gql`
+  mutation editInscripcion(
+    $id: ID!
+    $documento: String
+    $updateInput: ProyectoEditInscripciones
+  ) {
+    editInscripcion(
+      proyectoId: $id
+      documento: $documento
+      input: $updateInput
+    ) {
+      _id
+      inscripciones {
+        estado_inscripcion
+        documento
+        nombre
+      }
+    }
+  }
+`;
+export const UPDATE_PROYECTO = gql`
+  mutation editOneProject($id: ID!, $updateInput: ProyectoEditInput) {
+    editProyecto(_id: $id, input: $updateInput) {
+      _id
+      nombre_proyecto
+      objetivos_generales
+      objetivos_especificos
+      presupuesto
+      estado_proyecto
+      fase_proyecto
+    }
+  }
+`;
+export const ADD_AVANCE = gql`
+  mutation addOneAvance(
+    $id: ID!
+    $documento: String!
+    $addInput: ProyectoAddAvances
+  ) {
+    addAvance(proyectoId: $id, documento: $documento, input: $addInput) {
+      _id
+      avances {
+        documento
+        fecha_avances
+        documento
+        observaciones
+      }
+    }
+  }
+`;
+export const EDIT_AVANCE = gql`
+  mutation editOneAvance(
+    $id: ID!
+    $documento: String!
+    $editInput: ProyectoEditAvances
+  ) {
+    editAvance(proyectoId: $id, documento: $documento, input: $editInput) {
+      _id
+      avances {
+        documento
+        fecha_avances
+        documento
+        descripcion
+        observaciones
+      }
+    }
+  }
+`;
