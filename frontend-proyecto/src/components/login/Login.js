@@ -1,13 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { gql, useQuery } from "@apollo/client";
 import { client } from "../../useRequest";
 import RegistrarUsuario from "../registrarUsuario/RegistrarUsuario";
 import { useAlert } from "react-alert";
+import ImgForm from "../../img/noon.jpg";
 function Login(props) {
+  // useEffect(function () {
+  //   cambiarImagenes();
+  // }, []);
+
   const [login, setLogin] = useState({
     user: "",
     password: "",
   });
+  // const [cambiarImg, setCambiarImg] = useState({
+  //   primera: "",
+  // });
+
   const alert = useAlert();
   const handleChange = (event) => {
     setLogin({
@@ -53,6 +62,34 @@ function Login(props) {
     !localStorage.getItem("ID") &&
       alert.error("usuario invalido o sin autorización");
   }
+  //Cambiar imagenes del login dependiendo la 4 estaciones
+  // const cambiarImagenes = () => {
+  //   const fecha = new Date();
+  //   const hoy = fecha.getDate();
+  //   const mesActual = fecha.getMonth() + 1;
+  //   if (mesActual == 4 && hoy == 2) {
+  //     setCambiarImg({
+  //       primera:
+  //         "https://www.xtrafondos.com/wallpapers/vertical/ola-de-colores-6815.jpg",
+  //     });
+  //   } else {
+  //     setCambiarImg({
+  //       primera:
+  //         // "https://i.pinimg.com/originals/24/52/a8/2452a8ce23bcc5fb412df2f1241713ea.gif",
+  //         "https://cdn.pixabay.com/photo/2021/08/14/04/08/moon-6544516_960_720.jpg",
+  //     });
+  //   }
+  // };
+  //Funcion anonima para la zona horaria
+  // (function () {
+  //   const fecha = new Date();
+  //   const hoy = fecha.getDate();
+  //   const mesActual = fecha.getMonth() + 1;
+  //   console.log("Funciona la funcion anonima " + mesActual);
+  //   if (mesActual == 4 && hoy == 2) {
+  //   }
+  // })();
+
   return (
     <div>
       <section
@@ -69,7 +106,8 @@ function Login(props) {
                 <div className="row g-0">
                   <div className="col-md-6 col-lg-5 d-none d-md-block">
                     <img
-                      src="https://i.pinimg.com/originals/24/52/a8/2452a8ce23bcc5fb412df2f1241713ea.gif"
+                      // src="https://i.pinimg.com/originals/24/52/a8/2452a8ce23bcc5fb412df2f1241713ea.gif"
+                      src={ImgForm}
                       alt="login form"
                       className="img-fluid"
                       style={{ borderRadius: "1rem 0 0 1rem" }}
