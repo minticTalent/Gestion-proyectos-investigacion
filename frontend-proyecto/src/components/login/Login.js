@@ -180,16 +180,10 @@ function Login(props) {
                             Login
                           </button>
                         </div>
-                        <p
-                          className="mb-5 pb-lg-2"
-                          style={{ color: "#393f81" }}
-                        >
-                          No tienes cuenta ?{" "}
-                          <a href="#!" style={{ color: "#393f81" }}>
-                            <RegistrarUsuario />
-                          </a>
-                        </p>
                       </form>
+                      <p className="mb-5 pb-lg-2" style={{ color: "#393f81" }}>
+                        No tienes cuenta ? <RegistrarUsuario />
+                      </p>
                     </div>
                   </div>
                 </div>

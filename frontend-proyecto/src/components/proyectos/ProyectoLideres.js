@@ -11,6 +11,7 @@ import {
   EDIT_AVANCE,
 } from "../../useRequest.js";
 import { display, style } from "@mui/system";
+import SinProyectos from "./SinProyectos.js";
 import "./Misproyectos.css";
 function ProyectoLideres() {
   const alert = useAlert(); // constante para las alertas
@@ -485,7 +486,7 @@ function ProyectoLideres() {
                                           overlay={renderTooltipListar}
                                         >
                                           <AddCircleRoundedIcon
-                                            color="secondary"
+                                            color="primary"
                                             onClick={() =>
                                               visibilidad(items._id)
                                             }
@@ -545,7 +546,7 @@ function ProyectoLideres() {
                                           overlay={renderTooltipIns}
                                         >
                                           <AddCircleRoundedIcon
-                                            color="secondary"
+                                            color="primary"
                                             style={{ cursor: "pointer" }}
                                             title="Mostrar inscripciones"
                                             onClick={() =>
@@ -593,9 +594,26 @@ function ProyectoLideres() {
                                               </p>
                                             </div>
                                             <div className="col-md-5 align-self-start">
-                                              <p className="card-text lideres">
-                                                {item.estado_inscripcion}
-                                              </p>
+                                              {item.estado_inscripcion ==
+                                                "pendiente" ||
+                                              item.estado_inscripcion ==
+                                                "rechazado" ? (
+                                                <p
+                                                  className="card-text lideres"
+                                                  style={{ color: "red" }}
+                                                >
+                                                  {item.estado_inscripcion}
+                                                </p>
+                                              ) : (
+                                                <p
+                                                  className="card-text lideres"
+                                                  style={{
+                                                    color: "green",
+                                                  }}
+                                                >
+                                                  {item.estado_inscripcion}
+                                                </p>
+                                              )}
                                             </div>
                                             <div className="col-md-5 align-self-start">
                                               <p className="card-text lideres">
@@ -640,7 +658,7 @@ function ProyectoLideres() {
                                                     }
                                                   >
                                                     <AssignmentLateIcon
-                                                      color="secondary"
+                                                      color="primary"
                                                       style={{
                                                         cursor: "pointer",
                                                       }}
@@ -675,7 +693,7 @@ function ProyectoLideres() {
                                           overlay={renderTooltipAvances}
                                         >
                                           <AddCircleRoundedIcon
-                                            color="secondary"
+                                            color="primary"
                                             onClick={() =>
                                               visibilidadAvances(items._id)
                                             }
@@ -750,7 +768,7 @@ function ProyectoLideres() {
                                                 overlay={renderTooltipAvances}
                                               >
                                                 <AssignmentLateIcon
-                                                  color="secondary"
+                                                  color="primary"
                                                   style={{ cursor: "pointer" }}
                                                   onClick={() =>
                                                     UpdateAvance(
@@ -813,7 +831,9 @@ function ProyectoLideres() {
                             </div>
                           </div>
                         </>
-                      ) : null}
+                      ) : (
+                        <SinProyectos />
+                      )}
                     </>
                   );
                 })}

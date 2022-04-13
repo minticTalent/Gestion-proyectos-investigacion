@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { gql, useMutation } from "@apollo/client";
 import { Modal, Button, FloatingLabel, Form } from "react-bootstrap";
 import { CREATE_USUARIO } from "../../useRequest.js";
+import { useAlert } from "react-alert";
 function RegistrarUsuario() {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
@@ -14,7 +15,7 @@ function RegistrarUsuario() {
     rol: "",
     email: "",
   });
-
+  const alertRegister = useAlert();
   const [crear, { data, loading, error }] = useMutation(CREATE_USUARIO, {
     variables: {
       createinput: {
@@ -26,8 +27,21 @@ function RegistrarUsuario() {
         rol: registrar.rol,
       },
     },
+    onCompleted(data) {
+      if (data) {
+        alertRegister.success("Registro exitoso y en espera de autorización");
+        setRegistrar({
+          identificacion: "",
+          estado: "pendiente",
+          nombre: "",
+          password: "",
+          rol: "",
+          email: "",
+        });
+      }
+    },
   });
-  if (loading) return "Submitting...";
+  // if (loading) return "Submitting...";
   if (error) return `Submission error! ${error.message}`;
   const handleChange = (event) => {
     setRegistrar({
@@ -35,16 +49,14 @@ function RegistrarUsuario() {
       [event.target.name]: event.target.value,
     });
   };
-  async function handleSubmit(event) {
+  async function handleSubmitRegister(event) {
     event.preventDefault();
     // console.log("si");
     crear();
   }
   return (
     <>
-      <Button variant="link" onClick={handleShow}>
-        Registrate aquí
-      </Button>
+      <Button onClick={handleShow}>Registrate aquí</Button>
       <Modal
         show={show}
         onHide={handleClose}
@@ -58,7 +70,7 @@ function RegistrarUsuario() {
         <Modal.Body>
           <>
             <div className="container">
-              <form onSubmit={handleSubmit}>
+              <form onSubmit={handleSubmitRegister}>
                 <div className="row">
                   <div className="col-md-6 ">
                     <label htmlFor="exampleInputEmail1" className="form-label">
@@ -69,7 +81,7 @@ function RegistrarUsuario() {
                       name="identificacion"
                       onChange={handleChange}
                       className="form-control"
-                      id="exampleInputEmail1"
+                      id="exampleInputIdentificacion"
                       aria-describedby="emailHelp"
                     />
                   </div>
@@ -100,7 +112,7 @@ function RegistrarUsuario() {
                       name="nombre"
                       onChange={handleChange}
                       className="form-control"
-                      id="exampleInputEmail1"
+                      id="exampleInputNombre"
                       aria-describedby="emailHelp"
                     />
                   </div>
@@ -113,7 +125,7 @@ function RegistrarUsuario() {
                       name="password"
                       onChange={handleChange}
                       className="form-control"
-                      id="exampleInputEmail1"
+                      id="exampleInputPassword"
                       aria-describedby="emailHelp"
                     />
                   </div>

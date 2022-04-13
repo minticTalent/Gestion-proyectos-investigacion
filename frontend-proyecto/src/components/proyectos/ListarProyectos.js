@@ -9,11 +9,14 @@ import {
 } from "../../useRequest.js";
 import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
 import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
+import ZoomOutMapRoundedIcon from "@mui/icons-material/ZoomOutMapRounded";
 import SecurityUpdateWarningRoundedIcon from "@mui/icons-material/SecurityUpdateWarningRounded";
 import { useAlert } from "react-alert";
 import { OverlayTrigger, Tooltip, Modal, Button } from "react-bootstrap";
 import "./ListarProyecto.css";
 import CrearProyecto from "./CrearProyecto.js";
+import { AlertProyectoStudent } from "./AlertProyectoStudent.js";
+import { AlertProyectoLider } from "./AlertProyectoLider.js";
 
 function ListarProyectos(props) {
   const alert = useAlert(); // constante para las alertas
@@ -23,6 +26,7 @@ function ListarProyectos(props) {
   const [visible, setVisible] = useState(false); // Mostrar y ocultar los lideres
   const [visibleIns, setVisibleIns] = useState(false); // Mostrar y ocultar las inscripciones
   const [visibleAvances, setVisibleAvance] = useState(false); // Mostrar y ocultar los avances
+  const [visibleEspecificos, setVisibleEspecificos] = useState(false); // // Mostrar y ocultar los objetivos especificos
   const [show, setShow] = useState(false); //Estado para modal inscripcion
   const [showFaseProyecto, setShowFaseProyecto] = useState(false); //Estado para modal inscripcion
   const [showEstado, setShowEstado] = useState(false); // Estado para modal actualizar estado
@@ -127,6 +131,11 @@ function ListarProyectos(props) {
     setIdProyecto(id);
     setVisible(!visible);
   };
+  //Funcion para mostrar todo objetivos especificos
+  const visibilidadObjectEspecifico = (id) => {
+    setIdProyecto(id);
+    setVisibleEspecificos(!visibleEspecificos);
+  };
   //Funcion para cambiar el estado para mostar las inscripciones
   const visibilidadIns = (id) => {
     setIdProyecto(id);
@@ -159,6 +168,11 @@ function ListarProyectos(props) {
       Actualiza el estado si es activo a inactivo y viceversa{" "}
     </Tooltip>
   );
+  //Metodo para mostrar todo el objetivos especificos
+  const renderTooltiptObjectEspcifico = (props) => (
+    <Tooltip {...props}>Ver más. </Tooltip>
+  );
+  //Metodo para mostrar titulo en los iconos de Actualizar la fase del proyecto
   const renderTooltipFaseProyecto = (props) => (
     <Tooltip {...props}>Actualiza la fase el proyecto </Tooltip>
   );
@@ -208,7 +222,7 @@ function ListarProyectos(props) {
     });
   };
 
-  //METODO PARA CAMBIAR LA FASE DEL PROYECTO
+  //METODOS PARA CAMBIAR LA FASE DEL PROYECTO
   const updateFaseProyecto = (id, fase_proyecto) => {
     setStateUpdateFaseProyecto({
       ...stateUpdateFaseProyecto,
@@ -231,7 +245,11 @@ function ListarProyectos(props) {
     //clasName={sidebar ...} principal que tiene que llevar todas las paginas para acomodar su container dependiendo si esta abierto o cerrado el navbar
     <>
       <div className={sidebar ? "container-on" : "container-off"}>
-        {localStorage.getItem("rol") == "lider" ? <CrearProyecto /> : null}
+        {localStorage.getItem("rol") == "estudiante" && (
+          <AlertProyectoStudent />
+        )}
+        {localStorage.getItem("rol") == "lider" && <AlertProyectoLider />}
+        {localStorage.getItem("rol") == "lider" && <CrearProyecto />}
         {/**Modal para actualizar la fase del proyecto */}
         <Modal show={showFaseProyecto} onHide={handleCloseFaseProyecto}>
           <Modal.Header closeButton>
@@ -254,9 +272,9 @@ function ListarProyectos(props) {
                     onChange={handleChangeFaseProyecto}
                   >
                     <option defaultValue>Seleccione la opción</option>
-                    <option value="iniciado">iniciado</option>
-                    <option value="desarrollo">desarrolo</option>
-                    <option value="terminado">terminado</option>
+                    <option value="iniciado">Iniciado</option>
+                    <option value="desarrollo">Desarrollo</option>
+                    <option value="terminado">Terminado</option>
                   </select>
                 </div>
                 <div className="col-md-6">
@@ -373,11 +391,13 @@ function ListarProyectos(props) {
               return (
                 <div className="col-md-6 p-4" key={items._id}>
                   <div className="card-columns">
-                    <div className="card">
-                      <div className="card-body">
-                        <h5 className="card-title pb-2">
+                    <div className="card shadow-lg">
+                      <div className="card-header text-white bg-secondary pb-3">
+                        <h5>
                           proyecto: <i>{items.nombre_proyecto}</i>
                         </h5>
+                      </div>
+                      <div className="card-body">
                         <div className="row">
                           <div className="col-md-5 align-self-start">
                             <p className="card-text">_id:</p>
@@ -399,7 +419,38 @@ function ListarProyectos(props) {
                             <p className="card-text">Objetivos especificos:</p>
                           </div>
                           <div className="col-md-7 align-self-start">
-                            <p className="card-text">
+                            {items.objetivos_especificos.length > 21 ? (
+                              <div>
+                                <p className="card-text">
+                                  {items.objetivos_especificos.slice(0, 31)}...
+                                  <OverlayTrigger
+                                    placement="top"
+                                    delay={{ show: 250, hide: 400 }}
+                                    overlay={renderTooltiptObjectEspcifico}
+                                  >
+                                    <ZoomOutMapRoundedIcon
+                                      color="primary"
+                                      title="Mostrar inscripciones"
+                                      onClick={() =>
+                                        visibilidadObjectEspecifico(items._id)
+                                      }
+                                      style={{ cursor: "pointer" }}
+                                    />
+                                  </OverlayTrigger>
+                                </p>
+                              </div>
+                            ) : null}
+                          </div>
+                          {/* <hr></hr> */}
+                          <div
+                            className={
+                              visibleEspecificos && idProyecto == `${items._id}`
+                                ? "row visible"
+                                : "row invisible"
+                            }
+                          >
+                            <hr></hr>
+                            <p className="card-text lideres">
                               {items.objetivos_especificos}
                             </p>
                           </div>
@@ -437,7 +488,7 @@ function ListarProyectos(props) {
                                 overlay={renderTooltipListar}
                               >
                                 <AddCircleRoundedIcon
-                                  color="secondary"
+                                  color="primary"
                                   onClick={() => visibilidad(items._id)}
                                   style={{ cursor: "pointer" }}
                                 />
@@ -493,7 +544,7 @@ function ListarProyectos(props) {
                                 overlay={renderTooltipIns}
                               >
                                 <AddCircleRoundedIcon
-                                  color="secondary"
+                                  color="primary"
                                   title="Mostrar inscripciones"
                                   onClick={() => visibilidadIns(items._id)}
                                 />
@@ -507,7 +558,7 @@ function ListarProyectos(props) {
                                   overlay={renderTooltipInsProyect}
                                 >
                                   <AppRegistrationIcon
-                                    color="secondary"
+                                    color="primary"
                                     title="Inscribirme a este proyecto"
                                     onClick={() =>
                                       HandleClickInscripcion(
@@ -597,7 +648,7 @@ function ListarProyectos(props) {
                                 overlay={renderTooltipAvances}
                               >
                                 <AddCircleRoundedIcon
-                                  color="secondary"
+                                  color="primary"
                                   onClick={() => visibilidadAvances(items._id)}
                                 />
                               </OverlayTrigger>
@@ -673,7 +724,7 @@ function ListarProyectos(props) {
                                 >
                                   <SecurityUpdateWarningRoundedIcon
                                     style={{ cursor: "pointer" }}
-                                    color="secondary"
+                                    color="primary"
                                     onClick={() =>
                                       updateProyectoEstado(
                                         items._id,
@@ -701,7 +752,7 @@ function ListarProyectos(props) {
                                 >
                                   <SecurityUpdateWarningRoundedIcon
                                     style={{ cursor: "pointer" }}
-                                    color="secondary"
+                                    color="primary"
                                     onClick={() =>
                                       updateFaseProyecto(
                                         items._id,

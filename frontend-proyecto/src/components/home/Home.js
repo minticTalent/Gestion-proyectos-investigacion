@@ -2,6 +2,8 @@ import React from "react";
 import { Card, Container, Col, Row } from "react-bootstrap";
 import Welcome from "../../img/welcome(2).jpg";
 import HomeStudiante from "./HomeStudiante.js";
+import HomeLider from "./HomeLider.js";
+import HomeAdmin from "./HomeAdmin.js";
 import "./Home.css";
 function Home(props) {
   const { sidebar } = props;
@@ -22,8 +24,8 @@ function Home(props) {
               </Card.Title>
               <Card.Text className="text-center">
                 Página web creada para la construcción y manteniento de
-                proyectos, lo cual podras crear y controlar el funcionamiento y
-                tiempo de los proyectos dependiendo tu rol.
+                proyectos, lo cual podras crear y controlar el funcionamiento de
+                los proyectos dependiendo tu rol.
               </Card.Text>
               <Card.Text className="text-center">
                 <h2>¡Te deseo muchos éxitos!</h2>
@@ -69,7 +71,7 @@ function Home(props) {
                 solicitudes de los estudiantes que quieran hacer parte de tu
                 proyecto
               </Card.Text>
-              <Card.Link href="#">Saber más de lo que puedes hacer</Card.Link>
+              <HomeLider sidebar={sidebar} />
             </Card.Body>
           </Card>
         </Col>
@@ -88,7 +90,7 @@ function Home(props) {
                 Podras aceptar los proyectos y darle el seguimiento adecuado
                 hasta que se complete sastifatoriamente
               </Card.Text>
-              <Card.Link href="#">Saber más de lo que puedes hacer</Card.Link>
+              <HomeAdmin sidebar={sidebar} />
             </Card.Body>
           </Card>
         </Col>

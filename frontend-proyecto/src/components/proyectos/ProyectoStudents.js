@@ -6,6 +6,7 @@ import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
 import AssignmentLateIcon from "@mui/icons-material/AssignmentLate";
 import { useAlert } from "react-alert";
 import { LISTAR_PROYECTOS, ADD_AVANCE } from "../../useRequest.js";
+import SinProyectos from "./SinProyectos.js";
 function ProyectoStudents() {
   const alert = useAlert(); // constante para las alertas
   //ESTADOS
@@ -100,10 +101,7 @@ function ProyectoStudents() {
   };
   return (
     <>
-      <h3 style={{ marginLeft: "10px" }}>
-        Espacio para tus proyectos si tienes proyectos
-      </h3>
-      {/**MODAL AGRGAR AVANCE */}
+      {/**MODAL AGREGAR AVANCE */}
       <Modal show={show} size="lg" onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Agregar avance</Modal.Title>
@@ -163,7 +161,8 @@ function ProyectoStudents() {
                   {items.inscripciones.map((item) => {
                     return (
                       <>
-                        {item.estado_inscripcion == "aceptado" ? (
+                        {item.estado_inscripcion == "aceptado" &&
+                        item.documento == localStorage.getItem("documento") ? (
                           <>
                             <div className="col-md-6 p-4" key={items._id}>
                               <div className="card-columns">
@@ -245,7 +244,7 @@ function ProyectoStudents() {
                                             overlay={renderTooltipListar}
                                           >
                                             <AddCircleRoundedIcon
-                                              color="secondary"
+                                              color="primary"
                                               onClick={() =>
                                                 visibilidad(items._id)
                                               }
@@ -305,7 +304,7 @@ function ProyectoStudents() {
                                             overlay={renderTooltipIns}
                                           >
                                             <AddCircleRoundedIcon
-                                              color="secondary"
+                                              color="primary"
                                               style={{ cursor: "pointer" }}
                                               title="Mostrar inscripciones"
                                               onClick={() =>
@@ -394,7 +393,7 @@ function ProyectoStudents() {
                                             overlay={renderTooltipAvances}
                                           >
                                             <AddCircleRoundedIcon
-                                              color="secondary"
+                                              color="primary"
                                               onClick={() =>
                                                 visibilidadAvances(items._id)
                                               }
@@ -410,7 +409,7 @@ function ProyectoStudents() {
                                             >
                                               <AppRegistrationIcon
                                                 style={{ cursor: "pointer" }}
-                                                color="secondary"
+                                                color="primary"
                                                 title="Inscribirme a este proyecto"
                                                 onClick={() =>
                                                   HandleClickAddAvance(
@@ -506,7 +505,9 @@ function ProyectoStudents() {
                               </div>
                             </div>
                           </>
-                        ) : null}
+                        ) : (
+                          <SinProyectos />
+                        )}
                       </>
                     );
                   })}
